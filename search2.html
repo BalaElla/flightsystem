@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Flight Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        form {
+            margin-top: 20px;
+            text-align: center;
+        }
+        form table {
+            margin: 0 auto;
+        }
+        form table td {
+            padding: 5px;
+        }
+        form input[type="text"], form input[type="date"], form select {
+            padding: 8px;
+            width: 200px;
+        }
+        input[type="submit"] {
+            padding: 8px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: right;">
+            <a href="/login">Login</a>/<a href="/register">Register</a>
+        </div>
+        <h1>Advanced Flight Management System</h1>
+        <h2>Search for an Upcoming Flight</h2>
+        <form action="/result" method="post">
+            <table>
+                <tr>
+                    <td><label for="departure_city">Departure City: </label></td>
+                    <td><input type="text" name="departure_city" id="departure_city" placeholder="From" /></td>
+                </tr>
+                <tr>
+                    <td><label for="arrival_city">Arrival City: </label></td>
+                    <td><input type="text" name="arrival_city" id="arrival_city" placeholder="To" /></td>
+                </tr>
+                <tr>
+                    <td><label for="departure_date">Departure Date: </label></td>
+                    <td><input type="date" name="departure_date" id="departure_date" /></td>
+                </tr>
+                <tr>
+                    <td><label for="arrival_date">Arrival Date: </label></td>
+                    <td><input type="date" name="arrival_date" id="arrival_date" /></td>
+                </tr>
+            </table>
+            <input type="submit" value="Search" />
+        </form>
+        <h2>--OR--</h2>
+        <h2>Abstract Search</h2>
+        <form action="/abstract_result" method="POST">
+            <input type="text" name="searchText" placeholder="Search"/>
+            <input type="submit" value="Search" />
+        </form>
+        <h2>--OR--</h2>
+        <h2>Search for an Existing Flight</h2>
+        <form action="/number_result" method="POST">
+            <table>
+                <tr>
+                    <td><label for="airline_name">Airline: </label></td>
+                    <td>
+                        <select name="airline_name" id="airline_name" required>
+                            {% for airline in airlines %}
+                            <option value="{{airline['airline_name']}}">{{airline['airline_name']}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="flight_number">Flight Number: </label></td>
+                    <td><input type="text" name="flight_number" id="flight_number" placeholder="Num." /></td>
+                </tr>
+            </table>
+            <input type="submit" value="Search" />
+        </form>
+        {% if search_result %}
+        <div style="margin-top: 20px;">
+            <h2>Search Results</h2>
+            <table border="1">
+                <tr>
+                    <th>Airline</th>
+                    <th>Flight Number</th>
+                    <th>Departure Airport</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Airport</th>
+                    <th>Arrival Time</th>
+                    <th>Ticket Price</th>
+                    <th>Flight Status</th>
+                    <th>Plane ID</th>
+                </tr>
+                {% for line in search_result %}
+                <tr>
+                    <td>{{line['airline_name']}}</td>
+                    <td>{{line['flight_num']}}</td>
+                    <td>{{line['departure_airport']}}</td>
+                    <td>{{line['departure_time']}}</td>
+                    <td>{{line['arrival_airport']}}</td>
+                    <td>{{line['arrival_time']}}</td>
+                    <td>{{line['price']}}</td>
+                    <td>{{line['status']}}</td>
+                    <td>{{line['airplane_id']}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
